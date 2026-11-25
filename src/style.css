@@ -4192,3 +4192,101 @@ body.lightbox-open {
     font-size: 9px;
   }
 }
+/* =========================================
+   PLAYGROUND — 11 EFFECTS + CRT CONTROLS
+========================================= */
+
+.pg-effect-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.pg-effect-grid .pg-button {
+  min-width: 0;
+  text-align: center;
+}
+
+.pg-crt-panel {
+  padding: 15px;
+  border: 1px solid rgba(193, 139, 201, 0.28);
+  background: rgba(13, 11, 15, 0.35);
+}
+
+.pg-crt-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.pg-crt-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--lilac-light);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.pg-crt-toggle input {
+  accent-color: var(--lilac);
+  cursor: pointer;
+}
+
+.pg-crt-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 22px;
+}
+
+.pg-range-control {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.pg-range-control input {
+  width: 100%;
+  accent-color: var(--lilac);
+  cursor: pointer;
+}
+
+.pg-effect-grid .pg-button.is-active {
+  background: var(--lilac);
+  color: var(--black-deep);
+  border-color: var(--lilac);
+}
+
+.playground-screen-wrap {
+  overflow: hidden;
+}
+
+#playgroundCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 700px) {
+  .pg-effect-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pg-crt-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .pg-crt-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

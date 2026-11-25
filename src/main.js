@@ -388,6 +388,8 @@ document.querySelector('#app').innerHTML = `
 
 
   <!-- PLAYGROUND -->
+
+  <!-- PLAYGROUND -->
   <section class="site-section playground-section" id="playground">
 
     <div class="section-topline">
@@ -438,6 +440,7 @@ document.querySelector('#app').innerHTML = `
 
         <div class="playground-controls">
 
+          <!-- AUDIO -->
           <div class="playground-control-group">
             <span class="control-label">01 / AUDIO INPUT</span>
 
@@ -450,6 +453,8 @@ document.querySelector('#app').innerHTML = `
                 LOAD MP3
               </button>
 
+              
+
               <input
                 type="file"
                 id="playgroundAudioFile"
@@ -459,6 +464,7 @@ document.querySelector('#app').innerHTML = `
             </div>
           </div>
 
+          <!-- CAMERA -->
           <div class="playground-control-group">
             <span class="control-label">02 / CAMERA</span>
 
@@ -469,10 +475,12 @@ document.querySelector('#app').innerHTML = `
             </div>
           </div>
 
-          <div class="playground-control-group">
-            <span class="control-label">03 / VISUAL MUTATION</span>
+          <!-- EFFECTS -->
+          <div class="playground-control-group playground-effects-group">
+       <span class="control-label">03 / VISUAL MUTATION — 12 EFFECTS</span>
 
-            <div class="playground-button-row">
+            <div class="pg-effect-grid">
+
               <button class="pg-button is-active" type="button" data-effect="body">
                 BODY SCANNER
               </button>
@@ -488,12 +496,46 @@ document.querySelector('#app').innerHTML = `
               <button class="pg-button" type="button" data-effect="mirror">
                 MUTANT MIRROR
               </button>
+
+              <button class="pg-button" type="button" data-effect="ascii">
+                ASCII
+              </button>
+
+              <button class="pg-button" type="button" data-effect="halftone">
+                HALFTONE
+              </button>
+
+              <button class="pg-button" type="button" data-effect="dither">
+                DITHER
+              </button>
+
+              <button class="pg-button" type="button" data-effect="rgb">
+                RGB SPLIT
+              </button>
+
+              <button class="pg-button" type="button" data-effect="glow">
+                GLOW
+              </button>
+
+              <button class="pg-button" type="button" data-effect="pixel">
+  PIXEL SORTING
+</button>
+
+              <button class="pg-button" type="button" data-effect="crt">
+                CRT MODULATION
+              </button>
+
+              <button class="pg-button" type="button" data-effect="neon">
+  NEON EDGES
+</button>
+
             </div>
           </div>
 
+          <!-- GLOBAL INTENSITY -->
           <div class="playground-control-group">
             <label class="control-label" for="playgroundIntensity">
-              04 / INTENSITY
+              04 / GLOBAL INTENSITY
             </label>
 
             <input
@@ -505,17 +547,73 @@ document.querySelector('#app').innerHTML = `
             >
           </div>
 
+          <!-- CRT MODULAR OVERLAY -->
+          <div class="playground-control-group pg-crt-panel">
+
+            <div class="pg-crt-heading">
+              <span class="control-label">05 / CRT MODULATION LAYER</span>
+
+              <label class="pg-crt-toggle">
+                <input type="checkbox" id="crtEnabled">
+                <span>ENABLE OVERLAY</span>
+              </label>
+            </div>
+
+            <div class="pg-crt-controls">
+
+              <label class="pg-range-control">
+                <span>SCANLINES</span>
+                <input type="range" id="crtScanlines" min="0" max="100" value="45">
+              </label>
+
+              <label class="pg-range-control">
+                <span>CURVATURE</span>
+                <input type="range" id="crtCurvature" min="0" max="100" value="18">
+              </label>
+
+              <label class="pg-range-control">
+                <span>RGB MASK</span>
+                <input type="range" id="crtMask" min="0" max="100" value="25">
+              </label>
+
+              <label class="pg-range-control">
+                <span>FLICKER</span>
+                <input type="range" id="crtFlicker" min="0" max="100" value="12">
+              </label>
+
+              <label class="pg-range-control">
+                <span>DISTORTION</span>
+                <input type="range" id="crtDistortion" min="0" max="100" value="15">
+              </label>
+
+              <label class="pg-range-control">
+                <span>GLOW</span>
+                <input type="range" id="crtGlow" min="0" max="100" value="20">
+              </label>
+
+              <label class="pg-range-control">
+                <span>NOISE</span>
+                <input type="range" id="crtNoise" min="0" max="100" value="12">
+              </label>
+
+            </div>
+          </div>
+
+          <!-- FOOTER CONTROLS -->
           <div class="playground-control-footer">
+
             <button class="pg-button pg-random" id="playgroundRandom" type="button">
               RANDOMIZE ↗
             </button>
 
-            <button class="pg-button pg-expand-button"
+            <button
+              class="pg-button pg-expand-button"
               id="playgroundExpand"
               type="button"
               aria-expanded="false">
               EXPAND LAB +
             </button>
+
           </div>
 
           <audio id="playgroundAudio" controls hidden></audio>
@@ -524,7 +622,7 @@ document.querySelector('#app').innerHTML = `
 
         <div class="window-footer">
           <span>STATUS: EXPERIMENTAL</span>
-          <span>BUILD 001 / 2026</span>
+          <span>BUILD 002 / 2026</span>
         </div>
 
       </div>
@@ -532,7 +630,6 @@ document.querySelector('#app').innerHTML = `
     </div>
 
   </section>
-
 
   <!-- ABOUT -->
   <section class="site-section about-section" id="about">
@@ -1203,6 +1300,7 @@ updateOrbit();
 
 /* =========================================
    PLAYGROUND / AUDIO VISUAL LAB
+   SIGILRABBIT.NULL
 ========================================= */
 
 (() => {
@@ -1224,6 +1322,28 @@ updateOrbit();
   const expandButton = document.querySelector('#playgroundExpand');
   const layout = document.querySelector('.playground-layout');
 
+  // CRT CONTROLS
+  const crtEnabled =
+    document.querySelector('#crtEnabled') ||
+    document.querySelector('#playgroundCRTEnabled');
+
+  const crtControls = {
+    scanlines: document.querySelector('#crtScanlines') ||
+      document.querySelector('#playgroundCRTScanlines'),
+    curvature: document.querySelector('#crtCurvature') ||
+      document.querySelector('#playgroundCRTCurvature'),
+    rgb: document.querySelector('#crtRGB') ||
+      document.querySelector('#playgroundCRTRGB'),
+    flicker: document.querySelector('#crtFlicker') ||
+      document.querySelector('#playgroundCRTFlicker'),
+    distortion: document.querySelector('#crtDistortion') ||
+      document.querySelector('#playgroundCRTDistortion'),
+    glow: document.querySelector('#crtGlow') ||
+      document.querySelector('#playgroundCRTGlow'),
+    noise: document.querySelector('#crtNoise') ||
+      document.querySelector('#playgroundCRTNoise')
+  };
+
   if (!video || !canvas || !screen) return;
 
   const ctx = canvas.getContext('2d');
@@ -1233,7 +1353,23 @@ updateOrbit();
   const buffer = document.createElement('canvas');
   buffer.width = 320;
   buffer.height = 180;
-  const bctx = buffer.getContext('2d', { willReadFrequently: true });
+  const bctx = buffer.getContext('2d', {
+    willReadFrequently: true
+  });
+
+  const smallBuffer = document.createElement('canvas');
+  smallBuffer.width = 160;
+  smallBuffer.height = 90;
+  const sctx = smallBuffer.getContext('2d', {
+    willReadFrequently: true
+  });
+
+  const crtBuffer = document.createElement('canvas');
+  crtBuffer.width = W;
+  crtBuffer.height = H;
+  const crtCtx = crtBuffer.getContext('2d', {
+    willReadFrequently: true
+  });
 
   let cameraStream = null;
   let micStream = null;
@@ -1254,7 +1390,19 @@ updateOrbit();
     body: 'BODY SCANNER',
     liquid: 'LIQUID FEVER',
     xerox: 'XEROX MACHINE',
-    mirror: 'MUTANT MIRROR'
+    mirror: 'MUTANT MIRROR',
+    ascii: 'ASCII DREAM',
+    halftone: 'HALFTONE RITUAL',
+    dither: 'DITHER WORLD',
+    rgb: 'RGB SPLIT',
+    glow: 'AFTERGLOW',
+    pixel: 'PIXEL SORTING',
+    crt: 'CRT MODULATION',
+    neon: 'NEON EDGES'
+  };
+
+  const power = () => {
+    return Number(intensity?.value ?? 60) / 100;
   };
 
   function setStatus(message) {
@@ -1273,7 +1421,14 @@ updateOrbit();
     });
   }
 
+  function getControlValue(control, fallback = 0) {
+    if (!control) return fallback;
+    return Number(control.value) / 100;
+  }
+
+  // =========================================
   // AUDIO ENGINE
+  // =========================================
 
   function prepareAudio() {
     if (!audioContext) {
@@ -1313,13 +1468,7 @@ updateOrbit();
     try {
       prepareAudio();
 
-      audio.pause();
-
-      if (analyser) {
-        try {
-          analyser.disconnect(audioContext.destination);
-        } catch (error) {}
-      }
+      if (audio) audio.pause();
 
       stopMic();
 
@@ -1340,7 +1489,7 @@ updateOrbit();
   }
 
   async function loadAudioFile(file) {
-    if (!file) return;
+    if (!file || !audio) return;
 
     try {
       prepareAudio();
@@ -1389,16 +1538,21 @@ updateOrbit();
     bass = (bassTotal / 9) / 255;
   }
 
+  // =========================================
   // CAMERA
+  // =========================================
 
   async function toggleCamera() {
     if (cameraActive) {
-      cameraStream.getTracks().forEach(track => track.stop());
+      cameraStream?.getTracks().forEach(track => track.stop());
       cameraStream = null;
       video.srcObject = null;
       cameraActive = false;
 
-      cameraButton.textContent = 'ACTIVATE CAMERA';
+      if (cameraButton) {
+        cameraButton.textContent = 'ACTIVATE CAMERA';
+      }
+
       setStatus('CAMERA OFF');
       setHint('ACTIVATE CAMERA TO BEGIN');
       return;
@@ -1422,7 +1576,10 @@ updateOrbit();
       await video.play();
 
       cameraActive = true;
-      cameraButton.textContent = 'TURN CAMERA OFF';
+
+      if (cameraButton) {
+        cameraButton.textContent = 'TURN CAMERA OFF';
+      }
 
       setStatus('CAMERA ACTIVE');
       setHint('', false);
@@ -1433,7 +1590,9 @@ updateOrbit();
     }
   }
 
-  // VISUAL EFFECTS
+  // =========================================
+  // IMAGE HELPERS
+  // =========================================
 
   function drawCover(source, targetCtx, width, height) {
     const sw = source.videoWidth || source.width;
@@ -1454,29 +1613,48 @@ updateOrbit();
     );
   }
 
-  function drawBody() {
-    bctx.drawImage(video, 0, 0, 160, 90);
+  function prepareBuffer() {
+    bctx.clearRect(0, 0, 320, 180);
+    drawCover(video, bctx, 320, 180);
+  }
 
-    const pixels = bctx.getImageData(0, 0, 160, 90).data;
+  function drawBase() {
+    ctx.fillStyle = '#0D0B0F';
+    ctx.fillRect(0, 0, W, H);
+    drawCover(video, ctx, W, H);
+  }
+
+  // =========================================
+  // 01 / BODY SCANNER
+  // =========================================
+
+  function drawBody() {
+    sctx.clearRect(0, 0, 160, 90);
+    drawCover(video, sctx, 160, 90);
+
+    const pixels = sctx.getImageData(0, 0, 160, 90).data;
 
     ctx.fillStyle = '#0D0B0F';
     ctx.fillRect(0, 0, W, H);
 
     const spacing = 4;
-    const power = Number(intensity.value) / 100;
-    const threshold = 45 + power * 55;
+    const p = power();
+    const threshold = 45 + p * 55;
 
-    for (let y = 0; y < 90; y += 1) {
-      for (let x = 0; x < 160; x += 1) {
+    for (let y = 0; y < 90; y++) {
+      for (let x = 0; x < 160; x++) {
         const i = (y * 160 + x) * 4;
         const brightness =
           (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
 
         if (brightness > threshold) {
-          const size = 0.7 + (brightness / 255) * 2.5
-            + bass * power * 3;
+          const size = 0.7 +
+            (brightness / 255) * 2.5 +
+            bass * p * 3;
 
-          ctx.fillStyle = `rgba(193,139,201,${0.25 + brightness / 340})`;
+          ctx.fillStyle =
+            `rgba(193,139,201,${0.25 + brightness / 340})`;
+
           ctx.beginPath();
           ctx.arc(
             x * spacing + 2,
@@ -1500,9 +1678,13 @@ updateOrbit();
     ctx.stroke();
   }
 
+  // =========================================
+  // 02 / LIQUID FEVER
+  // =========================================
+
   function drawLiquid() {
-    const power = Number(intensity.value) / 100;
-    const displacement = 4 + bass * power * 55;
+    const p = power();
+    const displacement = 4 + bass * p * 55;
     const time = performance.now() * 0.001;
 
     ctx.fillStyle = '#0D0B0F';
@@ -1533,14 +1715,18 @@ updateOrbit();
     ctx.fillRect(0, 0, W, H);
   }
 
-  function drawXerox() {
-    const power = Number(intensity.value) / 100;
+  // =========================================
+  // 03 / XEROX MACHINE
+  // =========================================
 
-    bctx.drawImage(video, 0, 0, 320, 180);
+  function drawXerox() {
+    const p = power();
+
+    prepareBuffer();
 
     const image = bctx.getImageData(0, 0, 320, 180);
     const pixels = image.data;
-    const threshold = 100 + power * 65 - bass * 70;
+    const threshold = 100 + p * 65 - bass * 70;
 
     for (let i = 0; i < pixels.length; i += 4) {
       const gray =
@@ -1563,13 +1749,17 @@ updateOrbit();
     ctx.drawImage(buffer, 0, 0, W, H);
     ctx.imageSmoothingEnabled = true;
 
-    ctx.fillStyle = `rgba(193,139,201,${0.08 + bass * power * 0.25})`;
+    ctx.fillStyle = `rgba(193,139,201,${0.08 + bass * p * 0.25})`;
     ctx.fillRect(0, 0, W, H);
   }
 
+  // =========================================
+  // 04 / MUTANT MIRROR
+  // =========================================
+
   function drawMirror() {
-    const power = Number(intensity.value) / 100;
-    const zoom = 1 + bass * power * 0.45;
+    const p = power();
+    const zoom = 1 + bass * p * 0.45;
     const halfW = W / 2;
     const halfH = H / 2;
 
@@ -1599,9 +1789,519 @@ updateOrbit();
 
     ctx.restore();
 
-    ctx.fillStyle = `rgba(193,139,201,${0.05 + bass * power * 0.2})`;
+    ctx.fillStyle = `rgba(193,139,201,${0.05 + bass * p * 0.2})`;
     ctx.fillRect(0, 0, W, H);
   }
+
+  // =========================================
+  // 05 / ASCII DREAM
+  // =========================================
+
+ 
+function drawASCII() {
+  prepareBuffer();
+
+  const pixels = bctx.getImageData(0, 0, 320, 180).data;
+
+  const chars = ' .,:;irsXA253hMHGS#9B&@';
+  const cellW = 5;
+  const cellH = 7;
+  const p = power();
+
+  ctx.fillStyle = '#08070A';
+  ctx.fillRect(0, 0, W, H);
+
+  const scaleX = W / 320;
+  const scaleY = H / 180;
+
+  ctx.font = `${Math.max(9, Math.round(W / 48))}px monospace`;
+  ctx.textBaseline = 'top';
+
+  for (let y = 0; y < 180; y += cellH) {
+    for (let x = 0; x < 320; x += cellW) {
+      const i = (y * 320 + x) * 4;
+
+      const gray =
+        pixels[i] * 0.299 +
+        pixels[i + 1] * 0.587 +
+        pixels[i + 2] * 0.114;
+
+      const contrast = Math.max(
+        0,
+        Math.min(255, (gray - 105) * (1.5 + p))
+      );
+
+      const index = Math.min(
+        chars.length - 1,
+        Math.floor((contrast / 255) * (chars.length - 1))
+      );
+
+      ctx.fillStyle = `rgba(225,190,235,${0.45 + contrast / 510})`;
+
+      ctx.fillText(
+        chars[index],
+        x * scaleX,
+        y * scaleY
+      );
+    }
+  }
+}
+
+
+  // =========================================
+  // 06 / HALFTONE RITUAL
+  // =========================================
+
+  function drawHalftone() {
+    sctx.clearRect(0, 0, 160, 90);
+    drawCover(video, sctx, 160, 90);
+
+    const pixels = sctx.getImageData(0, 0, 160, 90).data;
+    const p = power();
+    const spacing = 4 + Math.round((1 - p) * 3);
+
+    ctx.fillStyle = '#0D0B0F';
+    ctx.fillRect(0, 0, W, H);
+
+    for (let y = 0; y < 90; y += 1) {
+      for (let x = 0; x < 160; x += 1) {
+        const i = (y * 160 + x) * 4;
+        const brightness =
+          (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
+
+        const radius =
+          (brightness / 255) * spacing * 0.8 +
+          bass * p * 2;
+
+        if (radius < 0.5) continue;
+
+        ctx.fillStyle = `rgba(216,178,224,${0.4 + brightness / 510})`;
+        ctx.beginPath();
+        ctx.arc(
+          x * (W / 160),
+          y * (H / 90),
+          radius * (W / 640),
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+      }
+    }
+  }
+
+  // =========================================
+  // 07 / DITHER WORLD
+  // =========================================
+
+  function drawDither() {
+    prepareBuffer();
+
+    const image = bctx.getImageData(0, 0, 320, 180);
+    const pixels = image.data;
+
+    const matrix = [
+      [0, 8, 2, 10],
+      [12, 4, 14, 6],
+      [3, 11, 1, 9],
+      [15, 7, 13, 5]
+    ];
+
+    const p = power();
+    const levels = 2 + Math.round(p * 5);
+
+    for (let y = 0; y < 180; y++) {
+      for (let x = 0; x < 320; x++) {
+        const i = (y * 320 + x) * 4;
+
+        const gray =
+          pixels[i] * 0.299 +
+          pixels[i + 1] * 0.587 +
+          pixels[i + 2] * 0.114;
+
+        const threshold = matrix[y % 4][x % 4] * 16;
+        const adjusted = gray + threshold - 120;
+
+        const value = Math.floor(
+          Math.max(0, Math.min(255, adjusted)) /
+          (255 / (levels - 1))
+        ) * (255 / (levels - 1));
+
+        pixels[i] = value;
+        pixels[i + 1] = value * 0.76;
+        pixels[i + 2] = value * 0.96;
+      }
+    }
+
+    bctx.putImageData(image, 0, 0);
+
+    ctx.fillStyle = '#0D0B0F';
+    ctx.fillRect(0, 0, W, H);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(buffer, 0, 0, W, H);
+    ctx.imageSmoothingEnabled = true;
+  }
+
+  // =========================================
+  // 08 / RGB SPLIT
+  // =========================================
+
+  function drawRGB() {
+    const p = power();
+    const offset = 2 + p * 16 + bass * 20;
+
+    ctx.fillStyle = '#0D0B0F';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.save();
+    ctx.globalAlpha = 0.75;
+    ctx.globalCompositeOperation = 'screen';
+
+    ctx.filter = 'sepia(1) saturate(5) hue-rotate(300deg)';
+    ctx.drawImage(video, -offset, 0, W, H);
+
+    ctx.filter = 'sepia(1) saturate(5) hue-rotate(90deg)';
+    ctx.drawImage(video, offset, 0, W, H);
+
+    ctx.filter = 'none';
+    ctx.globalAlpha = 0.85;
+    ctx.drawImage(video, 0, 0, W, H);
+
+    ctx.restore();
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+  // =========================================
+  // 09 / AFTERGLOW
+  // =========================================
+
+  function drawGlow() {
+    const p = power();
+    const blur = 3 + p * 18 + bass * 12;
+
+    ctx.fillStyle = '#0D0B0F';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.save();
+    ctx.filter = `blur(${blur}px) saturate(1.8)`;
+    ctx.globalAlpha = 0.9;
+    ctx.drawImage(video, 0, 0, W, H);
+    ctx.restore();
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    ctx.filter = 'saturate(1.6) contrast(1.15)';
+    ctx.globalAlpha = 0.65;
+    ctx.drawImage(video, 0, 0, W, H);
+    ctx.restore();
+
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = `rgba(193,139,201,${0.04 + bass * p * 0.18})`;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  // =========================================
+  // 10 / PIXEL SORTING
+  // =========================================
+
+  function drawPixelSorting() {
+    prepareBuffer();
+
+    const image = bctx.getImageData(0, 0, 320, 180);
+    const pixels = image.data;
+    const p = power();
+
+    const threshold = 90 + p * 100;
+    const maxLength = 8 + Math.round(p * 35);
+
+    for (let y = 0; y < 180; y++) {
+      let x = 0;
+
+      while (x < 320) {
+        const i = (y * 320 + x) * 4;
+        const brightness =
+          (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
+
+        if (brightness > threshold) {
+          const start = x;
+          const segment = [];
+
+          while (x < 320 && segment.length < maxLength) {
+            const j = (y * 320 + x) * 4;
+            const value =
+              (pixels[j] + pixels[j + 1] + pixels[j + 2]) / 3;
+
+            if (value <= threshold) break;
+
+            segment.push([
+              pixels[j],
+              pixels[j + 1],
+              pixels[j + 2],
+              pixels[j + 3]
+            ]);
+
+            x++;
+          }
+
+          segment.sort((a, b) => {
+            const aa = a[0] + a[1] + a[2];
+            const bb = b[0] + b[1] + b[2];
+            return bb - aa;
+          });
+
+          segment.forEach((pixel, index) => {
+            const j = (y * 320 + start + index) * 4;
+            pixels[j] = pixel[0];
+            pixels[j + 1] = pixel[1];
+            pixels[j + 2] = pixel[2];
+            pixels[j + 3] = pixel[3];
+          });
+        } else {
+          x++;
+        }
+      }
+    }
+
+    bctx.putImageData(image, 0, 0);
+
+    ctx.fillStyle = '#0D0B0F';
+    ctx.fillRect(0, 0, W, H);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(buffer, 0, 0, W, H);
+    ctx.imageSmoothingEnabled = true;
+  }
+
+
+function drawNeon() {
+  prepareBuffer();
+
+  const image = bctx.getImageData(0, 0, 320, 180);
+  const pixels = image.data;
+  const p = power();
+
+  const edges = new Uint8Array(320 * 180);
+
+  // Detect image edges
+  for (let y = 1; y < 179; y++) {
+    for (let x = 1; x < 319; x++) {
+      const i = (y * 320 + x) * 4;
+
+      const gray = (r, g, b) =>
+        r * 0.299 + g * 0.587 + b * 0.114;
+
+      const left = gray(
+        pixels[i - 4],
+        pixels[i - 3],
+        pixels[i - 2]
+      );
+
+      const right = gray(
+        pixels[i + 4],
+        pixels[i + 5],
+        pixels[i + 6]
+      );
+
+      const top = gray(
+        pixels[i - 1280],
+        pixels[i - 1279],
+        pixels[i - 1278]
+      );
+
+      const bottom = gray(
+        pixels[i + 1280],
+        pixels[i + 1281],
+        pixels[i + 1282]
+      );
+
+      const strength =
+        Math.abs(right - left) +
+        Math.abs(bottom - top);
+
+      edges[y * 320 + x] = strength > (35 + (1 - p) * 65)
+        ? Math.min(255, strength)
+        : 0;
+    }
+  }
+
+  ctx.fillStyle = '#050408';
+  ctx.fillRect(0, 0, W, H);
+
+  const glowCanvas = document.createElement('canvas');
+  glowCanvas.width = 320;
+  glowCanvas.height = 180;
+
+  const glowCtx = glowCanvas.getContext('2d');
+  const glowImage = glowCtx.createImageData(320, 180);
+
+  for (let i = 0; i < edges.length; i++) {
+    const value = edges[i];
+    const j = i * 4;
+
+    glowImage.data[j] = 210;
+    glowImage.data[j + 1] = 90 + value * 0.35;
+    glowImage.data[j + 2] = 255;
+    glowImage.data[j + 3] = value;
+  }
+
+  glowCtx.putImageData(glowImage, 0, 0);
+
+  ctx.save();
+  ctx.imageSmoothingEnabled = true;
+
+  // Soft neon halo
+  ctx.globalAlpha = 0.85 + bass * p * 0.5;
+  ctx.filter = `blur(${2 + p * 7 + bass * 5}px)`;
+  ctx.drawImage(glowCanvas, 0, 0, W, H);
+
+  // Sharp neon contours
+  ctx.filter = 'none';
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'screen';
+  ctx.drawImage(glowCanvas, 0, 0, W, H);
+
+  ctx.restore();
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.filter = 'none';
+}
+
+
+  // =========================================
+  // 11 / CRT MODULATION
+  // =========================================
+
+  function drawCRTBase() {
+    ctx.fillStyle = '#0D0B0F';
+    ctx.fillRect(0, 0, W, H);
+    ctx.drawImage(video, 0, 0, W, H);
+  }
+
+  function applyCRT() {
+    const time = performance.now() * 0.001;
+    const p = power();
+
+    const scanlines = getControlValue(crtControls.scanlines, 0.5);
+    const curvature = getControlValue(crtControls.curvature, 0.3);
+    const rgb = getControlValue(crtControls.rgb, 0.5);
+    const flicker = getControlValue(crtControls.flicker, 0.2);
+    const distortion = getControlValue(crtControls.distortion, 0.2);
+    const glow = getControlValue(crtControls.glow, 0.3);
+    const noise = getControlValue(crtControls.noise, 0.15);
+
+    // Distortion / horizontal displacement
+    if (distortion > 0) {
+      crtCtx.fillStyle = '#0D0B0F';
+      crtCtx.fillRect(0, 0, W, H);
+
+      const strips = 36;
+      const stripHeight = H / strips;
+
+      for (let i = 0; i < strips; i++) {
+        const y = i * stripHeight;
+        const wave = Math.sin(time * 5 + i * 0.8);
+        const offset = wave * distortion * 14 * p;
+
+        crtCtx.drawImage(
+          canvas,
+          0, y, W, stripHeight + 1,
+          offset, y, W, stripHeight + 1
+        );
+      }
+    } else {
+      crtCtx.clearRect(0, 0, W, H);
+      crtCtx.drawImage(canvas, 0, 0);
+    }
+
+    // Curvature / edge darkening
+    if (curvature > 0) {
+      const gradient = crtCtx.createRadialGradient(
+        W / 2, H / 2, H * 0.25,
+        W / 2, H / 2, H * 0.85
+      );
+
+      gradient.addColorStop(0, 'rgba(0,0,0,0)');
+      gradient.addColorStop(1, `rgba(0,0,0,${curvature * 0.8})`);
+
+      crtCtx.fillStyle = gradient;
+      crtCtx.fillRect(0, 0, W, H);
+    }
+
+    // Glow
+    if (glow > 0) {
+      crtCtx.save();
+      crtCtx.globalCompositeOperation = 'screen';
+      crtCtx.globalAlpha = glow * 0.25;
+      crtCtx.filter = `blur(${1 + glow * 7}px)`;
+      crtCtx.drawImage(canvas, 0, 0, W, H);
+      crtCtx.restore();
+    }
+
+    // RGB mask
+    if (rgb > 0) {
+      crtCtx.save();
+      crtCtx.globalAlpha = rgb * 0.16;
+      crtCtx.globalCompositeOperation = 'screen';
+
+      for (let x = 0; x < W; x += 3) {
+        crtCtx.fillStyle = 'rgba(255,0,0,0.5)';
+        crtCtx.fillRect(x, 0, 1, H);
+
+        crtCtx.fillStyle = 'rgba(0,255,0,0.5)';
+        crtCtx.fillRect(x + 1, 0, 1, H);
+
+        crtCtx.fillStyle = 'rgba(0,80,255,0.5)';
+        crtCtx.fillRect(x + 2, 0, 1, H);
+      }
+
+      crtCtx.restore();
+    }
+
+    // Scanlines
+    if (scanlines > 0) {
+      crtCtx.fillStyle = `rgba(0,0,0,${scanlines * 0.35})`;
+
+      const lineGap = Math.max(2, Math.round(3 - scanlines));
+
+      for (let y = 0; y < H; y += lineGap) {
+        crtCtx.fillRect(0, y, W, 1);
+      }
+    }
+
+    // Flicker
+    if (flicker > 0) {
+      const flickerValue =
+        Math.random() * flicker * 0.16;
+
+      crtCtx.fillStyle = `rgba(255,255,255,${flickerValue})`;
+      crtCtx.fillRect(0, 0, W, H);
+    }
+
+    // Noise
+    if (noise > 0) {
+      const amount = Math.round(noise * 140);
+
+      crtCtx.fillStyle = `rgba(255,255,255,${noise * 0.18})`;
+
+      for (let i = 0; i < amount; i++) {
+        const x = Math.random() * W;
+        const y = Math.random() * H;
+        crtCtx.fillRect(x, y, 1 + Math.random() * 2, 1);
+      }
+    }
+
+    // Final flicker brightness
+    if (flicker > 0) {
+      crtCtx.globalAlpha = 1 - Math.random() * flicker * 0.08;
+      ctx.clearRect(0, 0, W, H);
+      ctx.drawImage(crtBuffer, 0, 0);
+      crtCtx.globalAlpha = 1;
+    } else {
+      ctx.clearRect(0, 0, W, H);
+      ctx.drawImage(crtBuffer, 0, 0);
+    }
+  }
+
+  // =========================================
+  // IDLE SCREEN
+  // =========================================
 
   function drawIdle() {
     ctx.fillStyle = '#0D0B0F';
@@ -1611,7 +2311,13 @@ updateOrbit();
     ctx.lineWidth = 1;
 
     ctx.beginPath();
-    ctx.arc(W / 2, H / 2, 48 + Math.sin(performance.now() * 0.001) * 5, 0, Math.PI * 2);
+    ctx.arc(
+      W / 2,
+      H / 2,
+      48 + Math.sin(performance.now() * 0.001) * 5,
+      0,
+      Math.PI * 2
+    );
     ctx.stroke();
 
     ctx.fillStyle = '#D0A8D5';
@@ -1619,6 +2325,36 @@ updateOrbit();
     ctx.textAlign = 'center';
     ctx.fillText('SIGILRABBIT // AV LAB', W / 2, H / 2 + 4);
   }
+
+  // =========================================
+  // EFFECT SELECTOR
+  // =========================================
+
+  function selectEffect(effect) {
+    if (!effects[effect]) return;
+
+    currentEffect = effect;
+
+    if (effectLabel) {
+      effectLabel.textContent = effects[effect];
+    }
+
+    document.querySelectorAll('[data-effect]').forEach(button => {
+      button.classList.toggle(
+        'is-active',
+        button.dataset.effect === effect
+      );
+    });
+
+    // CRT can also be selected as a standalone effect.
+    if (effect === 'crt' && crtEnabled) {
+      crtEnabled.checked = true;
+    }
+  }
+
+  // =========================================
+  // MAIN RENDER LOOP
+  // =========================================
 
   function render() {
     readAudio();
@@ -1628,6 +2364,20 @@ updateOrbit();
       if (currentEffect === 'liquid') drawLiquid();
       if (currentEffect === 'xerox') drawXerox();
       if (currentEffect === 'mirror') drawMirror();
+      if (currentEffect === 'ascii') drawASCII();
+      if (currentEffect === 'halftone') drawHalftone();
+      if (currentEffect === 'dither') drawDither();
+      if (currentEffect === 'rgb') drawRGB();
+      if (currentEffect === 'glow') drawGlow();
+      if (currentEffect === 'pixel') drawPixelSorting();
+      if (currentEffect === 'neon') drawNeon();
+      if (currentEffect === 'crt') drawCRTBase();
+
+      // CRT MODULATION OVERLAY
+      // This is the corrected condition:
+      if (crtEnabled?.checked) {
+        applyCRT();
+      }
     } else {
       drawIdle();
     }
@@ -1635,21 +2385,9 @@ updateOrbit();
     animationFrame = requestAnimationFrame(render);
   }
 
-  function selectEffect(effect) {
-    if (!effects[effect]) return;
-
-    currentEffect = effect;
-    effectLabel.textContent = effects[effect];
-
-    document.querySelectorAll('[data-effect]').forEach(button => {
-      button.classList.toggle(
-        'is-active',
-        button.dataset.effect === effect
-      );
-    });
-  }
-
+  // =========================================
   // BUTTON EVENTS
+  // =========================================
 
   document.querySelectorAll('[data-effect]').forEach(button => {
     button.addEventListener('click', () => {
@@ -1681,7 +2419,10 @@ updateOrbit();
         effect => effect !== currentEffect
       );
 
-      const next = choices[Math.floor(Math.random() * choices.length)];
+      const next = choices[
+        Math.floor(Math.random() * choices.length)
+      ];
+
       selectEffect(next);
     });
   }
@@ -1694,11 +2435,27 @@ updateOrbit();
         ? 'COLLAPSE LAB −'
         : 'EXPAND LAB +';
 
-      expandButton.setAttribute('aria-expanded', String(expanded));
+      expandButton.setAttribute(
+        'aria-expanded',
+        String(expanded)
+      );
     });
   }
 
+  // CRT checkbox can be toggled independently.
+  if (crtEnabled) {
+    crtEnabled.addEventListener('change', () => {
+      setStatus(
+        crtEnabled.checked
+          ? 'CRT MODULATION ACTIVE'
+          : 'CRT MODULATION OFF'
+      );
+    });
+  }
+
+  // =========================================
   // START
+  // =========================================
 
   selectEffect('body');
   drawIdle();
