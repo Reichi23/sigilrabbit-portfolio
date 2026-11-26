@@ -3208,9 +3208,11 @@ main {
 
 /* HERO */
 .bunny-1 {
-  top: 2%;
+  top: 3%;
   left: 9%;
-width: clamp(170px, 15vw, 510px);
+  width: 220px !important;
+  max-width: none !important;
+  height: auto !important;
   transform: rotate(-10deg);
 }
 
@@ -3223,26 +3225,25 @@ width: clamp(170px, 15vw, 510px);
 
 /* WORK */
 .bunny-3 {
-  top: 30%;
+  top: 28%;
   left: 10%;
   width: clamp(140px, 52vw, 155px);
-  transform: scaleX(-1) rotate(-8deg);
+  transform: rotate(0deg);
 }
 
 .bunny-4 {
-  top: 32%;
-  right: 10%;
+  top: 30.8%;
+  right: 9%;
   width: clamp(110px, 12vw, 155px);
-  transform: rotate(11deg);
+  transform: rotate(0deg);
 }
 
 /* PLAYGROUND */
-/* PLAYGROUND */
 .bunny-5 {
-  top: 57%;
-  left: 3%;
-  width: clamp(105px, 11vw, 145px);
-  transform: rotate(-12deg);
+  top: 54%;
+  left: 15%;
+  width: clamp(255px, 50vw, 190px);
+  transform: scaleX(-1) rotate(0deg);
   z-index: 4;
 }
 
@@ -3250,23 +3251,17 @@ width: clamp(170px, 15vw, 510px);
   top: 51%;
   right: 3%;
   width: clamp(110px, 12vw, 155px);
-  transform: scaleX(-1) rotate(8deg);
+  transform: scaleX(-1) rotate(0deg);
   z-index: 4;
 }
 
 /* ABOUT */
-.bunny-7 {
-  top: 10%;
-  left: 10%;
-  width: clamp(110px, 12vw, 155px);
-  transform: rotate(-9deg);
-}
 
 .bunny-8 {
   top: 75%;
-  right: 05%;
+  right: 5%;
   width: clamp(105px, 11vw, 145px);
-  transform: rotate(12deg);
+  transform: rotate(0deg);
 }
 
 /* CONTACT */
@@ -3274,107 +3269,56 @@ width: clamp(170px, 15vw, 510px);
   top: 89%;
   left: 9%;
   width: clamp(110px, 12vw, 155px);
-  transform: scaleX(-1) rotate(-8deg);
+  transform: scaleX(-1) rotate(0deg);
 }
 
 .bunny-10 {
   top: 93%;
   right: 9%;
   width: clamp(110px, 12vw, 155px);
-  transform: rotate(10deg);
+  transform: rotate(0deg);
 }
 
 .bunny-11 {
   top: 94%;
   left: 17%;
   width: clamp(100px, 10vw, 135px);
-  transform: rotate(-12deg);
+  transform: rotate(0deg);
 }
 
 .bunny-12 {
   top: 92%;
   right: 17%;
   width: clamp(100px, 10vw, 135px);
-  transform: scaleX(-1) rotate(9deg);
+  transform: scaleX(-1) rotate(0deg);
 }
 
 /* =========================================
-   MOBILE — STICKERS
+   MOBILE — SOLO STICKERS DE ABOUT ME
 ========================================= */
 
 @media (max-width: 650px) {
   .bunny {
+    display: none;
+  }
+
+
+  .bunny-8 {
+    display: block;
     width: 88px;
     opacity: .76;
   }
 
-  .bunny-1 {
-    top: 3%;
-    left: 8%;
-  }
-
-  .bunny-2 {
-    top: 12%;
-    right: 8%;
-  }
-
-  .bunny-3 {
-    top: 23%;
-    left: 8%;
-  }
-
-  .bunny-4 {
-    top: 32%;
-    right: 8%;
-  }
-
-  .bunny-5 {
-    top: 42%;
-    left: 8%;
-  }
-
-  .bunny-6 {
-    top: 51%;
-    right: 8%;
-  }
-
   .bunny-7 {
-    top: 62%;
+    top: 10%;
     left: 8%;
   }
 
   .bunny-8 {
-    top: 71%;
-    right: 8%;
-  }
-
-  .bunny-9 {
-    top: 80%;
-    left: 8%;
-  }
-
-  .bunny-10 {
-    top: 87%;
-    right: 8%;
-  }
-
-  .bunny-11 {
-    top: 94%;
-    left: 17%;
-  }
-
-  .bunny-12 {
-    top: 97%;
-    right: 17%;
+    top: 75%;
+    right: 5%;
   }
 }
-
-.bunny-1 {
-  width: 220px !important;
-  max-width: none !important;
-  height: auto !important;
-}
-
 
 /* =========================================
    THE ORBIT — CENTERED COLLECTIBLE CARDS

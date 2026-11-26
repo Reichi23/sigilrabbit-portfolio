@@ -81,7 +81,6 @@ document.querySelector('#app').innerHTML = `
 
   <img src="/stickers/bunny3.png" class="bunny bunny-5" alt="">
   <img src="/stickers/bunny1.png" class="bunny bunny-6" alt="">
-  <img src="/stickers/bunny4.png" class="bunny bunny-7" alt="">
   <img src="/stickers/bunny2.png" class="bunny bunny-8" alt="">
 
   <img src="/stickers/bunny2.png" class="bunny bunny-9" alt="">
